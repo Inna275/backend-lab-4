@@ -1,5 +1,11 @@
 # backend-lab-2
 
+## Variant
+
+| Group number | Formula    | Variant    |
+|--------------|------------|------------|
+| 34           | 34 % 3 = 1 | Currencies |
+
 ## How to run
 
 ### 1. Access the deployed service
