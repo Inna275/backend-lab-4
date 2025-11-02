@@ -16,3 +16,4 @@ def healthcheck():
         "status": "ok", 
         "timestamp": datetime.utcnow().isoformat() + "Z"
     }), 200
+    
