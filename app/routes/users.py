@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 
 from app.models import db
 from app.models.user import UserModel
+from app.models.currency import CurrencyModel
 from app.schemas.user_schema import UserSchema
 
 from marshmallow import ValidationError
@@ -21,7 +22,20 @@ def create_user():
     except ValidationError as err:
         return jsonify({"error": err.messages}), 400
 
-    user = UserModel(name=data["name"])
+    if "default_currency_id" in data:
+        currency_id = data["default_currency_id"]
+    else:
+        default_currency = CurrencyModel.query.filter_by(code="UAH").first()
+        if not default_currency:
+            default_currency = CurrencyModel(code="UAH")
+            db.session.add(default_currency)
+            db.session.commit()
+        currency_id = default_currency.id
+
+    user = UserModel(
+        name=data["name"],
+        default_currency_id=currency_id,
+    )
     db.session.add(user)
 
     try:

@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 
 from app.models import db
+from app.models.user import UserModel
 from app.models.record import RecordModel
 from app.schemas.record_schema import RecordSchema
 
@@ -21,10 +22,17 @@ def create_record():
     except ValidationError as err:
         return jsonify({"error": err.messages}), 400
 
+    user = UserModel.query.get(data["user_id"])
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    currency_id = data.get("currency_id") or user.default_currency_id
+
     record = RecordModel(
         user_id=data["user_id"],
         category_id=data["category_id"],
-        amount=data["amount"]
+        currency_id=currency_id,
+        amount=data["amount"],
     )
     db.session.add(record)
 
