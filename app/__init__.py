@@ -25,7 +25,7 @@ db.init_app(app)
 migrate = Migrate()
 migrate.init_app(app, db)
 
-jwt = JWTManager(app)
+JWTManager(app)
 
 app.register_blueprint(general_bp)
 app.register_blueprint(users_bp)
