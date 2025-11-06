@@ -3,6 +3,7 @@ import time
 
 from flask import Flask
 from flask_migrate import Migrate, init, stamp, migrate as fmigrate, upgrade
+from flask_jwt_extended import JWTManager
 
 from .models import db
 
@@ -17,10 +18,14 @@ app = Flask(__name__)
 
 app.config.from_pyfile('config.py', silent=True)
 
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+
 db.init_app(app)
 
 migrate = Migrate()
 migrate.init_app(app, db)
+
+jwt = JWTManager(app)
 
 app.register_blueprint(general_bp)
 app.register_blueprint(users_bp)
