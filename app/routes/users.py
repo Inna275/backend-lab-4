@@ -3,6 +3,7 @@ from marshmallow import ValidationError
 from sqlalchemy.exc import IntegrityError
 from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from datetime import timedelta
 
 from app.models import db
 from app.models.user import UserModel
@@ -60,7 +61,7 @@ def login():
     if not user or not pbkdf2_sha256.verify(data["password"], user.password):
         return jsonify({"error": "Invalid credentials"}), 401
 
-    access_token = create_access_token(identity=str(user.id))
+    access_token = create_access_token(identity=str(user.id), expires_delta=timedelta(hours=1))
     return jsonify({"access_token": access_token}), 200
 
 
