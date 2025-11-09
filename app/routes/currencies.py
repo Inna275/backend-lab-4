@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from marshmallow import ValidationError
 from sqlalchemy.exc import IntegrityError
+from flask_jwt_extended import jwt_required
 
 from app.models import db
 from app.models.currency import CurrencyModel
@@ -11,6 +12,7 @@ currencies_bp = Blueprint("currencies", __name__)
 
 
 @currencies_bp.post("/currency")
+@jwt_required()
 def create_currency():
     schema = CurrencySchema()
     try:
@@ -47,6 +49,7 @@ def get_currency(currency_id):
 
 
 @currencies_bp.delete("/currency/<int:currency_id>")
+@jwt_required()
 def delete_currency(currency_id):
     currency = CurrencyModel.query.get(currency_id)
     if not currency:

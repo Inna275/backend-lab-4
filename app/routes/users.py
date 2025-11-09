@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from marshmallow import ValidationError
 from sqlalchemy.exc import IntegrityError
 from passlib.hash import pbkdf2_sha256
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
 from app.models import db
 from app.models.user import UserModel
@@ -60,7 +60,7 @@ def login():
     if not user or not pbkdf2_sha256.verify(data["password"], user.password):
         return jsonify({"error": "Invalid credentials"}), 401
 
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(identity=str(user.id))
     return jsonify({"access_token": access_token}), 200
 
 
@@ -81,10 +81,16 @@ def get_user(user_id):
 
 
 @users_bp.delete("/user/<int:user_id>")
+@jwt_required()
 def delete_user(user_id):
+    current_user_id = int(get_jwt_identity())
+    if current_user_id != user_id:
+        return jsonify({"error": "You can delete only your own account"}), 403
+
     user = UserModel.query.get(user_id)
     if not user:
         return jsonify({"error": "User not found"}), 404
+
     db.session.delete(user)
     db.session.commit()
     return jsonify({"message": "User deleted"}), 200
