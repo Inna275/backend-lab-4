@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from marshmallow import ValidationError
 from sqlalchemy.exc import IntegrityError
+from flask_jwt_extended import jwt_required
 
 from app.models import db
 from app.models.category import CategoryModel
@@ -11,6 +12,7 @@ categories_bp = Blueprint("categories", __name__)
 
 
 @categories_bp.post("/category")
+@jwt_required()
 def create_category():
     schema = CategorySchema()
     try:
@@ -38,6 +40,7 @@ def get_categories():
 
 
 @categories_bp.delete("/category")
+@jwt_required()
 def delete_category():
     category_id = request.args.get("id")
     if not category_id:
