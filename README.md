@@ -1,6 +1,6 @@
-# backend-lab-3
+# backend-lab-4
 
-## Variant
+## Variant (for lab 3)
 
 | Group number | Formula    | Variant    |
 |--------------|------------|------------|
@@ -9,7 +9,7 @@
 ## How to run
 
 ### 1. Access the deployed service
-https://backend-lab-3-aark.onrender.com
+https://backend-lab-4-73yr.onrender.com/
 
 ### 2. Run locally
 1. Make sure you have Docker and Docker Compose installed.
@@ -17,11 +17,11 @@ https://backend-lab-3-aark.onrender.com
    - [Install Docker Compose](https://docs.docker.com/compose/install)
 2. Clone the repository:
    ```bash
-   git clone https://github.com/Inna275/backend-lab-3.git
+   git clone https://github.com/Inna275/backend-lab-4.git
    ```
 3. Navigate to the project folder:
    ```bash
-   cd backend-lab-3
+   cd backend-lab-4
    ```
 4. Create a `.env` file with the following variables:
    ```env
@@ -29,7 +29,9 @@ https://backend-lab-3-aark.onrender.com
    POSTGRES_PASSWORD=postgres
    POSTGRES_HOST=db
    POSTGRES_PORT=5432
-   POSTGRES_DB=backend_lab_3
+   POSTGRES_DB=backend_lab_4
+   JWT_SECRET_KEY=secret_key
+   
    ```
 5. Build and run the containers:
    ```bash
